@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>意大利自駕行程 | Italy Road Trip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #c8102e;
+            --secondary: #1a472a;
+            --accent: #f4c430;
+            --light: #f8f6f3;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+            --safe: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --restaurant: #d97706;
+            --attraction: #8b5cf6;
+            --shop: #ec4899;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: var(--light);
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+        /* ==================== 頂部導航 ==================== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* ==================== 主容器 ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* ==================== 日期時間線 ==================== */
+        .day-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--primary);
+        }
+
+        .day-header h2 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* ==================== 天氣卡片 ==================== */
+        .weather-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+        }
+
+        .weather-details h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .weather-temp {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .weather-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* ==================== 活動卡片網格 ==================== */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ==================== 卡片基礎樣式 ==================== */
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .card-time {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .card-category-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .badge-driving {
+            background: #3b82f6;
+        }
+
+        .badge-restaurant {
+            background: var(--restaurant);
+        }
+
+        .badge-attraction {
+            background: var(--attraction);
+        }
+
+        .badge-hotel {
+            background: #ec4899;
+        }
+
+        .badge-shopping {
+            background: var(--shop);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-body {
+            padding: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-address {
+            background: #f3f4f6;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* ==================== 餐廳卡片特殊樣式 ==================== */
+        .card.restaurant {
+            border-top: 4px solid var(--restaurant);
+        }
+
+        .menu-item {
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: #fef3c7;
+            border-left: 3px solid var(--restaurant);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .menu-highlight {
+            background: #fde68a;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #92400e;
+        }
+
+        /* ==================== 景點卡片特殊樣式 ==================== */
+        .card.attraction {
+            border-top: 4px solid var(--attraction);
+        }
+
+        .story-section {
+            background: #f0e6ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            border-left: 3px solid var(--attraction);
+        }
+
+        .story-section h4 {
+            color: var(--attraction);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .story-section p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ==================== 必吃/必買標籤 ==================== */
+        .highlight-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0.3rem 0.3rem 0.3rem 0;
+        }
+
+        .tag-must-eat {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+
+        .tag-must-buy {
+            background: #c7d2fe;
+            color: #312e81;
+        }
+
+        .tag-reservation {
+            background: #a7f3d0;
+            color: #064e3b;
+        }
+
+        .tag-warning {
+            background: #fed7aa;
+            color: #7c2d12;
+        }
+
+        /* ==================== 按鈕組 ==================== */
+        .button-group {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a01a24;
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #0f3620;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #1e40af;
+        }
+
+        .btn-small {
+            flex: none;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* ==================== 表單與輸入 ==================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* ==================== 表格樣式 ==================== */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .budget-table th,
+        .budget-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .budget-table th {
+            background: var(--secondary);
+            color: white;
+            font-weight: 700;
+        }
+
+        .budget-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .budget-table .amount {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .budget-table .total-row {
+            background: #f0f9ff;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* ==================== 信息面板 ==================== */
+        .info-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .info-panel h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .info-value {
+            color: #1f2937;
+        }
+
+        .info-value a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== 駕駛資訊卡片 ==================== */
+        .driving-card {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .driving-card h4 {
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+        }
+
+        .driving-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .driving-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .driving-info-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        /* ==================== 警告信息 ==================== */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+
+        .alert-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        /* ==================== 標籤雲 ==================== */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        /* ==================== 隱藏區塊 ==================== */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== 響應式設計 ==================== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .weather-card {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .info-item {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .driving-info {
+                grid-template-columns: 1fr;
+            }
+
+            .budget-table {
+                font-size: 0.9rem;
+            }
+
+            .budget-table th,
+            .budget-table td {
+                padding: 0.8rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .card {
+                border-radius: 8px;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .day-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .info-item {
+                grid-template-columns: 70px 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        /* ==================== 實用類 ==================== */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--gray);
+        }
+
+        .mt-2 {
+            margin-top: 1rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 1rem;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <div class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-map-location-dot"></i> 意大利自駕</h1>
+            <i class="fas fa-flag" style="font-size: 1.8rem; color: #22c55e;"></i>
+        </div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('itinerary')">
+                <i class="fas fa-calendar"></i> 行程
+            </button>
+            <button class="tab-btn" onclick="switchTab('flights')">
+                <i class="fas fa-plane"></i> 航班
+            </button>
+            <button class="tab-btn" onclick="switchTab('hotels')">
+                <i class="fas fa-hotel"></i> 住宿
+            </button>
+            <button class="tab-btn" onclick="switchTab('budget')">
+                <i class="fas fa-wallet"></i> 預算
+            </button>
+            <button class="tab-btn" onclick="switchTab('emergency')">
+                <i class="fas fa-phone"></i> 緊急
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ==================== 行程標籤 ==================== -->
+        <div id="itinerary" class="tab-content active">
+            <!-- Day 1 -->
+            <div class="day-header">
+                <h2>📅 Day 1 | 10月9日 (星期三)</h2>
+                <p>米蘭 → 佛羅倫斯 → Montepulciano</p>
+            </div>
+
+            <!-- 天氣 Day 1 -->
+            <div class="weather-card">
+                <div class="weather-info">
+                    <div class="weather-icon">☁️</div>
+                    <div>
+                        <h3>佛羅倫斯</h3>
+                        <div class="weather-temp">18°C</div>
+                        <div class="weather-description">多雲偏晴 | 濕度 65%</div>
+                    </div>
+                </div>
+                <div class="weather-info">
+                    <div class="weather-icon">🌤️</div>
+                    <div>
+                        <h3>Montepulciano</h3>
+                        <div class="weather-temp">16°C</div>
+                        <div class="weather-description">晴朗 | 風速 10km/h</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 1 活動卡片 -->
+            <div class="activities-grid">
+                <!-- 駕車卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-time">10:00</span>
+                        <span class="card-category-badge badge-driving">駕駛</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-car"></i> 米蘭出發</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Via Gottlieb Wilhelm Daimler 14, Milano</div>
+                        
+                        <div class="driving-card">
+                            <h4><i class="fas fa-route"></i> 路線資訊</h4>
+                            <div class="driving-info">
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">🛣️</div>
+                                    <div><strong>A1 高速公路</strong><br>Bologna 方向 → Firenze Sud 出口</div>
+                                </div>
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">⏱️</div>
+                                    <div><strong>全程</strong><br>約 300km / 3 小時 15 分</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/milan-hotel" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 停車卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-time">13:15</span>
+                        <span class="card-category-badge badge-info">停車</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-parking"></i> 佛羅倫斯停車</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Parcheggio Sant'Ambrogio</div>
+                        <div class="card-address">
+                            Piazza Ghiberti, Firenze<br>
+                            <strong style="color: var(--restaurant);">€2/小時 | ZTL 限行區外</strong>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle alert-icon"></i>
+                            <div>
+                                <strong>⚠️ 佛羅倫斯歷史中心 ZTL 限行</strong><br>
+                                週一至五 7:30–20:00<br>
+                                週六 7:30–16:00<br>
+                                誤入罰款 €80–335
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle alert-icon"></i>
+                            <div>
+                                <strong>泊好車後</strong><br>
+                                步行 10–15 分鐘入老城
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/ParcheggioSantAmbrogio-Firenze" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 餐廳卡片 1 -->
+                <div class="card restaurant">
+                    <div class="card-header">
+                        <span class="card-time">13:30</span>
+                        <span class="card-category-badge badge-restaurant">餐廳</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=200&fit=crop" class="card-image" alt="Braceria Auditore">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-utensils"></i> Braceria Auditore</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Piazza del Grano 13R, Firenze</div>
+                        <div class="card-subtitle"><i class="fas fa-phone"></i> +39 055 217 3200</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div><strong>已訂位 13:30</strong><br>烏菲茲旁 3 分鐘</div>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">📌 點菜推介</h4>
+                        
+                        <div class="menu-item">
+                            <span class="menu-highlight">招牌菜</span> Bistecca alla Fiorentina<br>
+                            T骨扒 - 佛羅倫斯經典
+                        </div>
+
+                        <div class="menu-item">
+                            Peposo 紅酒燉牛膝<br>
+                            <span style="color: #ea580c; font-weight: 700;">€25</span>
+                        </div>
+
+                        <div class="menu-item">
+                            Pici all'aglione 大蒜手工麵<br>
+                            <span style="color: #ea580c; font-weight: 700;">€13</span>
+                        </div>
+
+                        <div class="menu-item">
+                            🍷 <span class="menu-highlight">推薦配酒</span><br>
+                            Chianti Classico 紅酒
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/BraceriaAuditore-Firenze" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                            <a href="tel:+390552173200" class="btn btn-info btn-small">
+                                <i class="fas fa-phone"></i> 致電
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點卡片 1 -->
+                <div class="card attraction">
+                    <div class="card-header">
+                        <span class="card-time">15:30</span>
+                        <span class="card-category-badge badge-attraction">景點</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1579558618101-41c6a3d93dd4?w=400&h=200&fit=crop" class="card-image" alt="烏菲茲美術館">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-image"></i> 烏菲茲美術館</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Piazzale degli Uffizi 6, Firenze</div>
+
+                        <div class="story-section">
+                            <h4>🎨 景點故事</h4>
+                            <p>全球最重要的文藝復興美術館之一，收藏來自 13 至 18 世紀的傑作。建築本身也是傑作，由瓦薩里於 1560 年設計，原為梅迪奇家族的辦公室。</p>
+                        </div>
+
+                        <h4 style="color: var(--attraction); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">⭐ 必看館藏</h4>
+
+                        <div class="menu-item" style="background: #f0e6ff; border-left: 3px solid var(--attraction);">
+                            <span class="highlight-tag tag-must-eat">必看</span><br>
+                            波提切利《維納斯的誕生》 & 《春》
+                        </div>
+
+                        <div class="menu-item" style="background: #f0e6ff; border-left: 3px solid var(--attraction);">
+                            <span class="highlight-tag tag-must-eat">必看</span><br>
+                            達文西《天使報喜》
+                        </div>
+
+                        <div class="menu-item" style="background: #f0e6ff; border-left: 3px solid var(--attraction);">
+                            <span class="highlight-tag tag-must-eat">必看</span><br>
+                            米開朗基羅《聖家族》
+                        </div>
+
+                        <div class="menu-item" style="background: #f0e6ff; border-left: 3px solid var(--attraction);">
+                            <span class="highlight-tag tag-must-eat">必看</span><br>
+                            拉斐爾《金翅雀聖母》
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb alert-icon"></i>
+                            <div><strong>💡 建議</strong><br>預先網上購票免排隊（特別是旺季）</div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/UffiziGallery-Firenze" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-small">
+                                <i class="fas fa-ticket"></i> 購票
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 駕車卡片 2 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-time">17:45</span>
+                        <span class="card-category-badge badge-driving">駕駛</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-car"></i> 前往 Montepulciano</h3>
+
+                        <div class="driving-card">
+                            <h4><i class="fas fa-route"></i> 路線資訊</h4>
+                            <div class="driving-info">
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">🛣️</div>
+                                    <div><strong>A1 高速公路</strong><br>Roma 方向 → Valdichiana 出口</div>
+                                </div>
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">⏱️</div>
+                                    <div><strong>全程</strong><br>約 130km / 1 小時 30 分</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/A1-Valdichiana" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 酒店卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-time">19:15</span>
+                        <span class="card-category-badge badge-hotel">住宿</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=200&fit=crop" class="card-image" alt="Hotel Panoramic">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-hotel"></i> Hotel Panoramic</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Via San Bartolomeo 2, Montepulciano</div>
+                        <div class="card-subtitle"><i class="fas fa-compass"></i> GPS: 43.076325, 11.791854</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div>
+                                <strong>✅ Check-in: 15:00 後</strong><br>
+                                <strong>連住 3 晚</strong>
+                            </div>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🏨 設施</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.9rem;">
+                            <div>✓ 酒店免費泊車</div>
+                            <div>✓ 游泳池</div>
+                            <div>✓ 網球場</div>
+                            <div>✓ 免費早餐</div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/hotelpanoramic-montepulciano" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 晚餐卡片 -->
+                <div class="card restaurant">
+                    <div class="card-header">
+                        <span class="card-time">20:00</span>
+                        <span class="card-category-badge badge-restaurant">餐廳</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1571407614943-c5c5f11b77ca?w=400&h=200&fit=crop" class="card-image" alt="Lieviti Pizzeria">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-fire"></i> Lieviti Pizzeria</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Via di Cagnano 33, Montepulciano</div>
+                        <div class="card-subtitle"><i class="fas fa-phone"></i> +39 0578 440240</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div><strong>已訂位 20:00</strong><br>週一休息</div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle alert-icon"></i>
+                            <div>歷史中心 ZTL | 建議搭的士/步行</div>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🍕 點菜推介</h4>
+
+                        <div class="menu-item">
+                            <span class="highlight-tag tag-must-eat">全店最佳</span><br>
+                            Pizza Sole Mio
+                        </div>
+
+                        <div class="menu-item">
+                            Pizza Con Zucchine
+                        </div>
+
+                        <div class="menu-item">
+                            Fritti 炸物拼盤<br>
+                            <span style="color: #ea580c; font-weight: 700;">開胃菜必點</span>
+                        </div>
+
+                        <div class="menu-item">
+                            🍺 <span class="highlight-tag tag-must-eat">招牌</span><br>
+                            手工精釀啤酒
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/LievitiMontepulciano" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                            <a href="tel:+390578440240" class="btn btn-info btn-small">
+                                <i class="fas fa-phone"></i> 致電
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="day-header">
+                <h2>📅 Day 2 | 10月10日 (星期四)</h2>
+                <p>Montepulciano → 酒莊 → 天空之城 → Orvieto</p>
+            </div>
+
+            <!-- 天氣 Day 2 -->
+            <div class="weather-card">
+                <div class="weather-info">
+                    <div class="weather-icon">☀️</div>
+                    <div>
+                        <h3>Civita di Bagnoregio</h3>
+                        <div class="weather-temp">19°C</div>
+                        <div class="weather-description">晴朗 | 濕度 55%</div>
+                    </div>
+                </div>
+                <div class="weather-info">
+                    <div class="weather-icon">🌤️</div>
+                    <div>
+                        <h3>Orvieto</h3>
+                        <div class="weather-temp">17°C</div>
+                        <div class="weather-description">晴朗 | 風速 8km/h</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 簡化卡片（篇幅所限，僅展示關鍵活動） -->
+            <div class="activities-grid">
+                <!-- 酒莊品酒 -->
+                <div class="card attraction">
+                    <div class="card-header">
+                        <span class="card-time">12:30</span>
+                        <span class="card-category-badge badge-attraction">景點</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1614707267537-b85faf00021b?w=400&h=200&fit=crop" class="card-image" alt="Tenuta Le Velette">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-wine-glass"></i> Tenuta Le Velette 酒莊品酒</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Località Le Velette, Orvieto</div>
+                        <div class="card-subtitle"><i class="fas fa-phone"></i> +39 0763 390 214</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div><strong>已預約 12:30</strong><br>家族經營自 1870 年代</div>
+                        </div>
+
+                        <div class="story-section">
+                            <h4>🍷 品酒體驗</h4>
+                            <p>參觀凝灰岩地下酒窖，品嚐 5 款葡萄酒（3白2紅）& 當地美食拼盤，費用約 €30/人</p>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🍇 推薦品種</h4>
+                        <div class="menu-item" style="background: #fef3c7; border-left: 3px solid var(--restaurant);">
+                            <span class="highlight-tag tag-must-eat">推薦</span><br>
+                            Orvieto Classico "Lunato"
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle alert-icon"></i>
+                            <div><strong>⚠️ 司機勿飲酒</strong></div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/Tenuta-LeVelette-Orvieto" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 天空之城 -->
+                <div class="card attraction">
+                    <div class="card-header">
+                        <span class="card-time">15:00</span>
+                        <span class="card-category-badge badge-attraction">景點</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop" class="card-image" alt="Civita di Bagnoregio">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-mountain"></i> Civita di Bagnoregio (天空之城)</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Civita di Bagnoregio, VT</div>
+
+                        <div class="story-section">
+                            <h4>🏰 景點故事</h4>
+                            <p>建於凝灰岩上的中世紀孤城，素有「垂死之城」之稱。宮崎駿動畫電影《天空之城》的靈感來源。壯觀的地質構造和獨特的地理位置吸引遊客。</p>
+                        </div>
+
+                        <h4 style="color: var(--attraction); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">⭐ 必看景點</h4>
+                        <div style="font-size: 0.9rem; line-height: 1.8;">
+                            <div>✓ San Donato 教堂</div>
+                            <div>✓ 廣場咖啡館眺望山谷</div>
+                            <div><span class="highlight-tag tag-reservation">入城費</span> €5/人</div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle alert-icon"></i>
+                            <div>
+                                <strong>💡 溫馨提示</strong><br>
+                                • 步行 15 分鐘過橋入城<br>
+                                • 上坡路，著舒適鞋<br>
+                                • 停車費：€1.50/小時（建議泊 3 小時）
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/Civita-diBagnoregio" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orvieto 晚餐 -->
+                <div class="card restaurant">
+                    <div class="card-header">
+                        <span class="card-time">19:30</span>
+                        <span class="card-category-badge badge-restaurant">餐廳</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=200&fit=crop" class="card-image" alt="Seven Restaurant Cafè">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-leaf"></i> Seven Restaurant Cafè</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Via Sandro Pertini 28, Monteleone d'Orvieto</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div><strong>已訂位 21:00</strong></div>
+                        </div>
+
+                        <div class="story-section">
+                            <h4>🍄 餐廳特色</h4>
+                            <p>以松露菜餚聞名。精選當地食材，傳統義大利烹飪技藝與現代創意的完美結合。</p>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🍽️ 推薦菜式</h4>
+
+                        <div class="menu-item">
+                            <span class="highlight-tag tag-must-eat">招牌菜</span><br>
+                            Tagliolini with White Truffles<br>
+                            白松露細麵
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/9PQL8byZWDTdojf7A" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                            <a href="tel:+39" class="btn btn-info btn-small">
+                                <i class="fas fa-phone"></i> 致電
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="day-header">
+                <h2>📅 Day 3 | 10月11日 (星期五)</h2>
+                <p>Pienza → Val d'Orcia → Saturnia → San Quirico</p>
+            </div>
+
+            <!-- 天氣 Day 3 -->
+            <div class="weather-card">
+                <div class="weather-info">
+                    <div class="weather-icon">☀️</div>
+                    <div>
+                        <h3>Val d'Orcia</h3>
+                        <div class="weather-temp">20°C</div>
+                        <div class="weather-description">晴朗 | 濕度 50%</div>
+                    </div>
+                </div>
+                <div class="weather-info">
+                    <div class="weather-icon">☁️</div>
+                    <div>
+                        <h3>Saturnia</h3>
+                        <div class="weather-temp">18°C</div>
+                        <div class="weather-description">多雲 | 風速 6km/h</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activities-grid">
+                <!-- Pienza -->
+                <div class="card attraction">
+                    <div class="card-header">
+                        <span class="card-time">11:30</span>
+                        <span class="card-category-badge badge-attraction">景點</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1578574494267-e34e9ef45d11?w=400&h=200&fit=crop" class="card-image" alt="Pienza">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-gopuram"></i> Pienza - 文藝復興理想城市</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Pienza Centro Storico</div>
+
+                        <div class="story-section">
+                            <h4>🏛️ 城市故事</h4>
+                            <p>UNESCO 世界遺產。15 世紀教宗庇護二世打造的「理想城市」典範，完美體現文藝復興城市規劃理念。</p>
+                        </div>
+
+                        <h4 style="color: var(--attraction); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">⭐ 必去景點</h4>
+                        <div style="font-size: 0.9rem; line-height: 1.8;">
+                            <div>✓ Piazza Pio II 廣場</div>
+                            <div>✓ Via dell'Amore 愛情街 / Via del Bacio 接吻街</div>
+                            <div>✓ 鎮外圍牆邊步道眺望 Val d'Orcia</div>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🧀 必試特產</h4>
+                        <div class="menu-item" style="background: #fef3c7; border-left: 3px solid var(--restaurant);">
+                            <span class="highlight-tag tag-must-buy">必買</span><br>
+                            Pecorino di Pienza - 羊奶芝士<br>
+                            <span style="color: #ea580c; font-size: 0.85rem;">鎮上多間芝士舖可免費試食</span>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/PienzaCentro" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Val d'Orcia 自駕 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-time">14:00</span>
+                        <span class="card-category-badge badge-driving">駕駛</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=200&fit=crop" class="card-image" alt="Val d'Orcia">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-car"></i> 自駕穿越 Val d'Orcia</h3>
+
+                        <div class="driving-card">
+                            <h4><i class="fas fa-route"></i> 路線資訊</h4>
+                            <div class="driving-info">
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">🛣️</div>
+                                    <div><strong>SP146 → SP55 → SR2 → SP10 → Saturnia</strong></div>
+                                </div>
+                                <div class="driving-info-item">
+                                    <div class="driving-info-icon">⏱️</div>
+                                    <div><strong>全程</strong><br>約 60km / 1 小時 20 分</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="story-section">
+                            <h4>📸 沿途景點</h4>
+                            <p>
+                                • 柏樹大道<br>
+                                • Cappella di Vitaleta 小教堂（SP146 近 Pienza 段可停車拍照）<br>
+                                • Montalcino 遠眺
+                            </p>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-heart alert-icon"></i>
+                            <div><strong>💛 托斯卡納最美自駕路線之一</strong></div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/Val-dOrcia-scenic" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saturnia 溫泉 -->
+                <div class="card attraction">
+                    <div class="card-header">
+                        <span class="card-time">15:30</span>
+                        <span class="card-category-badge badge-attraction">景點</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1545139664-cf2b76fd7f13?w=400&h=200&fit=crop" class="card-image" alt="Saturnia Hot Springs">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-water"></i> Terme di Saturnia 溫泉</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Cascate del Mulino, Saturnia</div>
+
+                        <div class="story-section">
+                            <h4>♨️ 溫泉詳情</h4>
+                            <p>
+                                <strong>免費天然溫泉瀑布</strong><br>
+                                • 水溫約 37.5°C，含硫磺<br>
+                                • 米白色梯田式水池<br>
+                                • 24 小時開放
+                            </p>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle alert-icon"></i>
+                            <div>
+                                <strong>⚠️ 必帶物品</strong><br>
+                                • 防滑水鞋<br>
+                                • 毛巾<br>
+                                • 防水袋<br>
+                                • 更換衣物
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-circle alert-icon"></i>
+                            <div>
+                                <strong>⚠️ 安全提示</strong><br>
+                                • 停車：€2.50/小時（8:00前/20:00後免費）<br>
+                                • 切勿泊街邊（會罰款）<br>
+                                • 貴重物品隨身帶（盜竊常見）<br>
+                                • 車內勿留可見物品<br>
+                                • 硫磺味會留在泳衣上
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/Cascate-del-Mulino-Saturnia" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- San Quirico 晚餐 -->
+                <div class="card restaurant">
+                    <div class="card-header">
+                        <span class="card-time">19:30</span>
+                        <span class="card-category-badge badge-restaurant">餐廳</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=200&fit=crop" class="card-image" alt="Trattoria al Vecchio Forno">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-spoon"></i> Trattoria al Vecchio Forno</h3>
+                        <div class="card-subtitle"><i class="fas fa-map-pin"></i> Via Poliziano 18, San Quirico</div>
+                        <div class="card-subtitle"><i class="fas fa-phone"></i> +39 0577 897380</div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle alert-icon"></i>
+                            <div><strong>米芝蓮指南推薦</strong><br>已訂位 19:30 | 營業至 22:00</div>
+                        </div>
+
+                        <h4 style="color: var(--restaurant); margin-top: 1rem; margin-bottom: 0.8rem; font-weight: 700;">🍝 必點菜式</h4>
+
+                        <div class="menu-item">
+                            <span class="highlight-tag tag-must-eat">招牌菜</span><br>
+                            Peposo di Guancia di Chianina al Brunello<br>
+                            奇安那牛肉頰
+                        </div>
+
+                        <div class="menu-item">
+                            Tagliatelle al cinghiale<br>
+                            野豬肉寬麵
+                        </div>
+
+                        <div class="menu-item">
+                            <span class="highlight-tag tag-must-eat">特選</span><br>
+                            Tagliolini 36 tuorli al tartufo<br>
+                            一款用36個蛋黃製作的手工細麵，搭配松露
+                        </div>
+
+                        <div class="button-group">
+                            <a href="https://maps.app.goo.gl/VecchioForno-San-Quirico" class="btn btn-primary btn-small" target="_blank">
+                                <i class="fas fa-navigation"></i> 導航
+                            </a>
+                            <a href="tel:+390577897380" class="btn btn-info btn-small">
+                                <i class="fas fa-phone"></i> 致電
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 航班資訊標籤 ==================== -->
+        <div id="flights" class="tab-content">
+            <div class="info-panel">
+                <h3><i class="fas fa-plane-departure"></i> 出發航班</h3>
+                <div class="info-item">
+                    <div class="info-label">日期</div>
+                    <div class="info-value">2024年10月9日</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">出發地</div>
+                    <div class="info-value">香港 (HKG)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">目的地</div>
+                    <div class="info-value">米蘭 Malpensa (MXP)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">航班號</div>
+                    <div class="info-value">---</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">出發時間</div>
+                    <div class="info-value">---</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">抵達時間</div>
+                    <div class="info-value">---</div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-plane-arrival"></i> 回程航班</h3>
+                <div class="info-item">
+                    <div class="info-label">日期</div>
+                    <div class="info-value">待確認</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">出發地</div>
+                    <div class="info-value">米蘭 Malpensa (MXP)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">目的地</div>
+                    <div class="info-value">香港 (HKG)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">航班號</div>
+                    <div class="info-value">---</div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="fas fa-lightbulb alert-icon"></i>
+                <div>
+                    <strong>💡 機場小貼士</strong><br>
+                    • 提前 3 小時到達機場<br>
+                    • 辦理登機和行李托運<br>
+                    • 保管登機牌和護照<br>
+                    • 米蘭機場有租車服務，方便自駕
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 住宿資訊標籤 ==================== -->
+        <div id="hotels" class="tab-content">
+            <div class="info-panel">
+                <h3><i class="fas fa-hotel"></i> Hotel Panoramic, Montepulciano</h3>
+                <div class="info-item">
+                    <div class="info-label">地址</div>
+                    <div class="info-value">Via San Bartolomeo 2, Montepulciano</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">GPS 坐標</div>
+                    <div class="info-value">43.076325, 11.791854</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">入住日期</div>
+                    <div class="info-value">10月9日 (晚上 19:15)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">退房日期</div>
+                    <div class="info-label">10月12日</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">住宿天數</div>
+                    <div class="info-value">3 晚</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">設施</div>
+                    <div class="info-value">
+                        ✓ 酒店免費泊車<br>
+                        ✓ 游泳池<br>
+                        ✓ 網球場<br>
+                        ✓ 免費早餐
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Check-in</div>
+                    <div class="info-value">15:00 後（晚到）</div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle alert-icon"></i>
+                <div>
+                    <strong>✅ 酒店優勢</strong><br>
+                    • 坐擁全景觀，景色優美<br>
+                    • 設施完善，免費停車<br>
+                    • 免費早餐，方便出發<br>
+                    • 位置佳，是自駕的理想基地
+                </div>
+            </div>
+
+            <div class="info-panel mt-2">
+                <h3><i class="fas fa-map-marker-alt"></i> 其他推薦住宿</h3>
+                <div style="font-size: 0.95rem; line-height: 1.8; color: #6b7280;">
+                    <p><strong>Orvieto 區域：</strong></p>
+                    <p>• Palazzo Piccolomini 豪華民宿<br>
+                    • Orvieto Underground 洞穴酒店（獨特體驗）</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>Pienza 區域：</strong></p>
+                    <p>• Relais Pienza 度假村<br>
+                    • 農家莊園民宿</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 預算表標籤 ==================== -->
+        <div id="budget" class="tab-content">
+            <div class="info-panel">
+                <h3><i class="fas fa-calculator"></i> 旅行預算表</h3>
+                
+                <table class="budget-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>金額</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="background: #f0f9ff; font-weight: 700;">🛏️ 住宿費用</td>
+                        </tr>
+                        <tr>
+                            <td>Hotel Panoramic (3晚)</td>
+                            <td class="amount">€450</td>
+                            <td>含免費早餐</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="background: #f0f9ff; font-weight: 700;">🍽️ 餐飲費用</td>
+                        </tr>
+                        <tr>
+                            <td>Day 1 午餐 - Braceria Auditore</td>
+                            <td class="amount">€80</td>
+                            <td>2人 + 飲料</td>
+                        </tr>
+                        <tr>
+                            <td>Day 1 晚餐 - Lieviti Pizzeria</td>
+                            <td class="amount">€50</td>
+                            <td>2人 + 飲料</td>
+                        </tr>
+                        <tr>
+                            <td>Day 2 酒莊品酒 - Tenuta Le Velette</td>
+                            <td class="amount">€60</td>
+                            <td>2人 + 美食拼盤</td>
+                        </tr>
+                        <tr>
+                            <td>Day 2 晚餐 - Seven Restaurant</td>
+                            <td class="amount">€150</td>
+                            <td>2人，松露菜餚</td>
+                        </tr>
+                        <tr>
+                            <td>Day 3 晚餐 - Trattoria al Vecchio Forno</td>
+                            <td class="amount">€120</td>
+                            <td>2人，米芝蓮推薦</td>
+                        </tr>
+                        <tr>
+                            <td>其他小食/咖啡</td>
+                            <td class="amount">€40</td>
+                            <td>零食和飲料</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="background: #f0f9ff; font-weight: 700;">🎫 景點門票</td>
+                        </tr>
+                        <tr>
+                            <td>烏菲茲美術館</td>
+                            <td class="amount">€32</td>
+                            <td>2人（網上預購）</td>
+                        </tr>
+                        <tr>
+                            <td>天空之城 Civita 入城費</td>
+                            <td class="amount">€10</td>
+                            <td>2人 × €5</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="background: #f0f9ff; font-weight: 700;">🚗 交通費用</td>
+                        </tr>
+                        <tr>
+                            <td>租車費 (3天)</td>
+                            <td class="amount">€180</td>
+                            <td>中型車</td>
+                        </tr>
+                        <tr>
+                            <td>油費</td>
+                            <td class="amount">€80</td>
+                            <td>估計 400km</td>
+                        </tr>
+                        <tr>
+                            <td>停車費</td>
+                            <td class="amount">€15</td>
+                            <td>零散停車</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="background: #f0f9ff; font-weight: 700;">🛍️ 購物/其他</td>
+                        </tr>
+                        <tr>
+                            <td>Pecorino 芝士購買</td>
+                            <td class="amount">€30</td>
+                            <td>伴手禮</td>
+                        </tr>
+                        <tr>
+                            <td>紅酒購買</td>
+                            <td class="amount">€60</td>
+                            <td>Chianti & Brunello</td>
+                        </tr>
+                        <tr>
+                            <td>其他伴手禮</td>
+                            <td class="amount">€50</td>
+                            <td>當地製品</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>💰 總預算</td>
+                            <td class="amount">€1,418</td>
+                            <td>以上基於估計</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                    <i class="fas fa-info-circle alert-icon"></i>
+                    <div>
+                        <strong>📊 預算提示</strong><br>
+                        • 此為雙人預算估計<br>
+                        • 不含國際機票<br>
+                        • 匯率以 1€ = 8.5 HKD 計算<br>
+                        • 建議預留 15% 應急金
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-list-check"></i> 預算分類統計</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="padding: 1rem; background: #fef3c7; border-radius: 8px; border-left: 4px solid var(--restaurant);">
+                        <div style="font-size: 0.9rem; color: #6b7280;">🍽️ 餐飲</div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--restaurant);">€500</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">35%</div>
+                    </div>
+                    <div style="padding: 1rem; background: #e0e7ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <div style="font-size: 0.9rem; color: #6b7280;">🚗 交通</div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: #3b82f6;">€275</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">19%</div>
+                    </div>
+                    <div style="padding: 1rem; background: #dbeafe; border-radius: 8px; border-left: 4px solid var(--attraction);">
+                        <div style="font-size: 0.9rem; color: #6b7280;">🏨 住宿</div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--attraction);">€450</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">32%</div>
+                    </div>
+                    <div style="padding: 1rem; background: #ddd6fe; border-radius: 8px; border-left: 4px solid var(--attraction);">
+                        <div style="font-size: 0.9rem; color: #6b7280;">🎫 門票 & 購物</div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--attraction);">€193</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">14%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-credit-card"></i> 支付提示</h3>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle alert-icon"></i>
+                    <div>
+                        <strong>💳 支付方式</strong><br>
+                        • 大部分餐廳和商店接受信用卡<br>
+                        • 小店鋪和停車場可能只收現金<br>
+                        • 建議在米蘭機場或市區提取現金<br>
+                        • 銀行匯率通常比機場更優惠
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 緊急聯絡標籤 ==================== -->
+        <div id="emergency" class="tab-content">
+            <div class="info-panel">
+                <h3><i class="fas fa-phone-alt"></i> 緊急聯絡電話</h3>
+                <div class="info-item">
+                    <div class="info-label">警察</div>
+                    <div class="info-value">
+                        <a href="tel:112">☎️ 112</a> (歐洲統一）
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">消防</div>
+                    <div class="info-value">
+                        <a href="tel:115">☎️ 115</a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">救護車</div>
+                    <div class="info-value">
+                        <a href="tel:118">☎️ 118</a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">道路協助 (ACI)</div>
+                    <div class="info-value">
+                        <a href="tel:803116">☎️ 803116</a> (義大利)
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-building"></i> 領事及大使館</h3>
+                <div class="info-item">
+                    <div class="info-label">香港駐意大利總領事館</div>
+                    <div class="info-value">
+                        📍 Milano, Italy<br>
+                        ☎️ +39 02 7601 0691
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-hospital"></i> 醫療資訊</h3>
+                <div class="info-item">
+                    <div class="info-label">醫療求助</div>
+                    <div class="info-value">
+                        撥打 112 或 118 尋求緊急醫療幫助
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">藥房</div>
+                    <div class="info-value">
+                        義大利：Farmacia / 藥房標誌為綠色十字
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">醫院 (Montepulciano 附近)</div>
+                    <div class="info-value">
+                        Ospedale della Val d'Orcia
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-utensils"></i> 食物過敏資訊</h3>
+                <div class="info-item">
+                    <div class="info-label">常用表達</div>
+                    <div class="info-value">
+                        "Sono allergico/a a..." (我對...過敏)<br>
+                        "Senza..." (不要...)
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle alert-icon"></i>
+                <div>
+                    <strong>⚠️ 行駛安全</strong><br>
+                    • 意大利右轉不停紅燈（Rosso a Destra）<br>
+                    • 高速公路限速 130km/h<br>
+                    • 必須配戴安全帶<br>
+                    • 0.5 mg/100ml 為酒駕限制<br>
+                    • 保持車距，警惕其他車輛
+                </div>
+            </div>
+
+            <div class="info-panel mt-2">
+                <h3><i class="fas fa-car"></i> 租車保險資訊</h3>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle alert-icon"></i>
+                    <div>
+                        <strong>💡 建議購買</strong><br>
+                        • 全車損保險 (CDW - Collision Damage Waiver)<br>
+                        • 第三方責任保險<br>
+                        • 個人物品保險<br>
+                        • 道路協助保險<br>
+                        <br>
+                        保留所有收據，以備索賠之用。
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel mt-2">
+                <h3><i class="fas fa-link"></i> 實用網站及APP</h3>
+                <div style="font-size: 0.95rem; line-height: 2;">
+                    <div>🗺️ Google Maps - 導航必備</div>
+                    <div>🚗 ViaMichelin - 路線規劃和停車資訊</div>
+                    <div>☀️ MeteoItalia - 天氣預報</div>
+                    <div>💶 XE Currency - 即時匯率</div>
+                    <div>🚕 Uber/Bolt - 都市交通</div>
+                    <div>📍 Rome2Rio - 多種交通方式比較</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 標籤切換功能
+        function switchTab(tabName) {
+            // 隱藏所有標籤內容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 移除所有按鈕的活動狀態
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 顯示選定的標籤內容
+            document.getElementById(tabName).classList.add('active');
+
+            // 激活對應的按鈕
+            event.target.classList.add('active');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 第一個標籤默認激活
+            document.querySelector('.tab-btn').classList.add('active');
+        });
+    </script>
+</body>
+</html>
